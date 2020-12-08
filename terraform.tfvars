@@ -1,10 +1,10 @@
-aws_access_key = "AKIAYLBHURDWF23Y2ON3"
+aws_access_key = ""
 
-aws_secret_key = "PzWQWT9lXp6JRqB2XkyL0gvPMWJECHbW1LhDzM5z"
+aws_secret_key = ""
 
-key_name = "labot-eu"
+key_name = "-eu"
 
-private_key_path = "~/.ssh/labot-eu.pem"
+private_key_path = ""
 
 region = "eu-west-1"
 
