@@ -94,16 +94,6 @@ resource "aws_subnet" "subnet" {
 
 }
 
-//resource "aws_subnet" "subnet1" {
-//  count                   = var.subnet_count
-//  cidr_block              = cidrsubnet(var.network_address_space1, 8, count.index)
-//  vpc_id                  = aws_vpc.vpc.id
-//  map_public_ip_on_launch = true
-//  availability_zone       = data.aws_availability_zones.available.names[count.index]
-//
-//  tags = merge(local.common_tags, { Name = "${var.environment_tag}-subnet${count.index + 1}" })
-//
-//}
 # ROUTING #
 resource "aws_route_table" "rtb" {
   vpc_id = aws_vpc.vpc.id
@@ -158,13 +148,18 @@ resource "aws_security_group" "nginx-sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    }
   # HTTP access from the VPC
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [var.network_address_space]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # outbound internet access
@@ -192,7 +187,12 @@ resource "aws_elb" "web" {
     lb_port           = 80
     lb_protocol       = "http"
   }
-
+  listener {
+    instance_port     = 443
+    instance_protocol = "http"
+    lb_port           = 443
+    lb_protocol       = "http"
+  }
   tags = merge(local.common_tags, { Name = "${var.environment_tag}-elb" })
 }
 # Route 53 records

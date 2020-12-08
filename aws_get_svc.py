@@ -21,12 +21,12 @@ def main():
         # Display RDS instances in VPC
         client = boto3.client('rds')
         response = client.describe_db_instances()
-
+        print('Regions:', response['Regions'])
         # Disply ec2 instances
         ec2 = boto3.resource('ec2')
         response = ec2.describe_regions()
         print('Regions:', response['Regions'])
-
+        # Display subnets  in VPC
         subnets = list(vpc.subnets.all())
     if len(subnets) > 0:
         print("\nSubnets:")
